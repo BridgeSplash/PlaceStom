@@ -1,8 +1,8 @@
 # PlaceStom
-![Build Status](https://img.shields.io/github/workflow/status/WeiiswurstDev/PlaceStom/Java%20CI%20with%20Gradle?style=for-the-badge)
-![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/weiiswurstdev/PlaceStom?style=for-the-badge)
-![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/WeiiswurstDev_PlaceStom?server=https%3A%2F%2Fsonarcloud.io&sonarVersion=8.9&style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/WeiiswurstDev/PlaceStom?style=for-the-badge)
+![Build Status](https://img.shields.io/github/workflow/status/BridgeSplash/PlaceStom/Java%20CI%20with%20Gradle?style=for-the-badge)
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/BridgeSplash/PlaceStom?style=for-the-badge)
+![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/BridgeSplash_PlaceStom?server=https%3A%2F%2Fsonarcloud.io&sonarVersion=8.9&style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/BridgeSplash/PlaceStom?style=for-the-badge)
 
 PlaceStom is a [Minestom](https://github.com/Minestom/Minestom) implementation of [r/place](https://www.reddit.com/r/place/).
 
@@ -21,7 +21,7 @@ PlaceStom is a [Minestom](https://github.com/Minestom/Minestom) implementation o
   * Change cooldown for everyone (Permission: placestom.setCooldown)
   * Clear a chunk (/clearchunk, `placestom.clearchunk`)
   * Generate a server icon from the canvas around you (/generateservericon, `placestom.servericon`)
-  * (You need an extension like [JustPermissions](https://github.com/JustDoom/JustPermissions) to give players permissions)
+  * Implementation for [LuckPerms](https://github.com/Project-Cepi/LuckPerms)
 
 ## Upcoming features
 * Storing the player position (or maybe in an extension?)

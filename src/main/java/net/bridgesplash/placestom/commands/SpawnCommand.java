@@ -1,4 +1,4 @@
-package dev.weiiswurst.placestom.commands;
+package net.bridgesplash.placestom.commands;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.condition.Conditions;

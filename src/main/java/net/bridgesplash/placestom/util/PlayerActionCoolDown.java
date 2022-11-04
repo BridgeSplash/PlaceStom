@@ -1,4 +1,4 @@
-package dev.weiiswurst.placestom.util;
+package net.bridgesplash.placestom.util;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerActionCoolDown {
 
-    public static final int COOL_DOWN_TIME_SECONDS = Integer.getInteger("placestom.cooldown", 3);
+    public static final int COOL_DOWN_TIME_SECONDS = Integer.getInteger("cooldown", 3);
 
     private final Map<UUID, Long> playerCoolDownMap = new ConcurrentHashMap<>();
 

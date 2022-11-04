@@ -1,6 +1,8 @@
-package dev.weiiswurst.placestom.listeners;
+package net.bridgesplash.placestom.listeners;
 
+import net.bridgesplash.placestom.PlaceServer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.ping.ResponseData;
 
@@ -11,11 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
+
 
 public class MotdListener implements Consumer<ServerListPingEvent> {
 
-    private static final Logger LOGGER = Logger.getLogger("ServerIcon");
+    private static final ComponentLogger logger = PlaceServer.logger;
 
     private final String serverIcon;
 
@@ -27,7 +29,7 @@ public class MotdListener implements Consumer<ServerListPingEvent> {
             ImageIO.write(image, "png", iconOutputStream);
             iconBase64 = Base64.getEncoder().encodeToString(iconOutputStream.toByteArray());
         } catch (IOException e) {
-            LOGGER.info("No server icon found. Place a server icon at ./server-icon.png (dimensions: 64x64)");
+            logger.info("No server icon found. Place a server icon at ./server-icon.png (dimensions: 64x64)");
             iconBase64 = "";
         }
         this.serverIcon = "data:image/png;base64," + iconBase64;
@@ -36,7 +38,7 @@ public class MotdListener implements Consumer<ServerListPingEvent> {
     @Override
     public void accept(ServerListPingEvent event) {
         ResponseData response = event.getResponseData();
-        response.setDescription(Component.text("Minecraft Place"));
+        response.setDescription(Component.text("BridgeSplash Limbo "));
         response.setFavicon(serverIcon);
         event.setResponseData(response);
     }

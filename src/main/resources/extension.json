@@ -1,0 +1,8 @@
+{
+  "entrypoint": "net.bridgesplash.placestom.PlaceServer",
+  "name": "PlaceStom",
+  "version": "@version@",
+  "dependencies": [
+    "luckperms"
+  ]
+}

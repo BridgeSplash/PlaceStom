@@ -1,4 +1,4 @@
-package dev.weiiswurst.placestom.world;
+package net.bridgesplash.placestom.world;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -19,10 +19,9 @@ public class PlayerPlacementLog {
     @DatabaseField(canBeNull = false)
     private String playerName;
 
+    @SuppressWarnings("unused")
     @ApiStatus.Internal
-    public PlayerPlacementLog() {
-
-    }
+    public PlayerPlacementLog() {}
 
     public PlayerPlacementLog(int x, int z, Player player) {
         this.blockId = toDatabaseId(x,z);
@@ -30,6 +29,7 @@ public class PlayerPlacementLog {
         this.playerName = player.getUsername();
     }
 
+    @SuppressWarnings("unused")
     public long getBlockId() {
         return blockId;
     }

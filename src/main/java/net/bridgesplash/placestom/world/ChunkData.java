@@ -1,4 +1,4 @@
-package dev.weiiswurst.placestom.world;
+package net.bridgesplash.placestom.world;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
@@ -11,7 +11,7 @@ public class ChunkData {
     private static final int CHUNK_X_FACTOR = 0xFFFF;
 
     @DatabaseField(index = true, canBeNull = false, id = true)
-    private int chunkCoords;
+    private final int chunkCoords;
 
     @DatabaseField(canBeNull = false, dataType=DataType.BYTE_ARRAY, columnName = "chunkData")
     private byte[] serializedBlocks;
@@ -20,6 +20,7 @@ public class ChunkData {
     private final int chunkZ;
 
     // Constructor required by ORMLite
+    @SuppressWarnings("unused")
     public ChunkData() {
         this(0,0);
     }
@@ -43,10 +44,12 @@ public class ChunkData {
         serializedBlocks[index] = block;
     }
 
+    @SuppressWarnings("unused")
     public int getChunkX() {
         return chunkX;
     }
 
+    @SuppressWarnings("unused")
     public int getChunkZ() {
         return chunkZ;
     }

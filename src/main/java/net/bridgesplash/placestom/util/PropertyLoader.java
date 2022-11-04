@@ -1,5 +1,6 @@
-package dev.weiiswurst.placestom.util;
+package net.bridgesplash.placestom.util;
 
+import net.bridgesplash.placestom.PlaceServer;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.Collections;
+import java.util.Objects;
 
 public final class PropertyLoader {
 
@@ -23,16 +25,21 @@ public final class PropertyLoader {
     public static void loadProperties() throws IOException, URISyntaxException {
         File propertiesFile = new File("./server.properties");
         if (!propertiesFile.exists()) {
-            URI defaultPropertiesUrl = Thread.currentThread().getContextClassLoader().getResource("server.properties").toURI();
-            fixPathFromJar(defaultPropertiesUrl);
-            Files.copy(Paths.get(defaultPropertiesUrl), new FileOutputStream(propertiesFile));
+            try {
+                URI defaultPropertiesUrl = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("server.properties")).toURI();
+                fixPathFromJar(defaultPropertiesUrl);
+                Files.copy(Paths.get(defaultPropertiesUrl), new FileOutputStream(propertiesFile));
+            }catch(NullPointerException e){
+                PlaceServer.logger.error("Failed to load default server.properties (due to not being in resource folder of plugin)");
+                return;
+            }
         }
         try (FileReader reader = new FileReader(propertiesFile)) {
             System.getProperties().load(reader);
         }
     }
 
-    private static void fixPathFromJar(URI uri) throws IOException {
+    private static void fixPathFromJar(URI uri) {
         // this function is a hack to enable reading modules from within a JAR file
         // see https://stackoverflow.com/a/48298758
         if ("jar".equals(uri.getScheme())) {
@@ -42,7 +49,11 @@ public final class PropertyLoader {
                         provider.getFileSystem(uri);
                     } catch (FileSystemNotFoundException e) {
                         // in this case we need to initialize it first:
-                        provider.newFileSystem(uri, Collections.emptyMap());
+                        try {
+                            provider.newFileSystem(uri, Collections.emptyMap());
+                        }catch(Exception ex){
+                            PlaceServer.logger.error("Failed to fix path from jar");
+                        }
                     }
                 }
             }

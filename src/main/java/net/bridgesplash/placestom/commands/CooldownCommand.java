@@ -1,6 +1,6 @@
-package dev.weiiswurst.placestom.commands;
+package net.bridgesplash.placestom.commands;
 
-import dev.weiiswurst.placestom.util.PlayerActionCoolDown;
+import net.bridgesplash.placestom.util.PlayerActionCoolDown;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.ArgumentType;

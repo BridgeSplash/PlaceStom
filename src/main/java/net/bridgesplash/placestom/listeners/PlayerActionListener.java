@@ -1,16 +1,17 @@
-package dev.weiiswurst.placestom.listeners;
+package net.bridgesplash.placestom.listeners;
 
 import com.j256.ormlite.dao.Dao;
-import dev.weiiswurst.placestom.commands.CooldownCommand;
-import dev.weiiswurst.placestom.world.PlaceBlocks;
-import dev.weiiswurst.placestom.util.ProtectedLocations;
-import dev.weiiswurst.placestom.world.ChunkData;
-import dev.weiiswurst.placestom.util.PlayerActionCoolDown;
-import dev.weiiswurst.placestom.world.PlayerPlacementLog;
+import net.bridgesplash.placestom.commands.CooldownCommand;
+import net.bridgesplash.placestom.util.PlayerActionCoolDown;
+import net.bridgesplash.placestom.util.ProtectedLocations;
+import net.bridgesplash.placestom.world.ChunkData;
+import net.bridgesplash.placestom.world.PlaceBlocks;
+import net.bridgesplash.placestom.world.PlayerPlacementLog;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
 import java.sql.SQLException;
@@ -28,7 +29,8 @@ public interface PlayerActionListener {
             return;
         }
         coolDown.applyAnimation(player);
-
+        Instance instance = player.getInstance();
+        if(instance == null)return;
         try {
             ChunkData chunkData = chunkDao.queryForId(ChunkData.toDatabaseIndex(location.chunkX(), location.chunkZ()));
             chunkData.setBlockAt(ChunkData.worldCoordsToLocalIndex(location),
@@ -37,7 +39,7 @@ public interface PlayerActionListener {
             chunkDao.update(chunkData);
             PlayerPlacementLog logEntry = new PlayerPlacementLog(location.blockX(), location.blockZ(), player);
             playerPlacementLogs.createOrUpdate(logEntry);
-            player.getInstance().setBlock(location, block);
+            instance.setBlock(location, block);
         } catch (SQLException e) {
             e.printStackTrace();
             player.sendMessage("Error while updating the database. Your edit was not saved.");

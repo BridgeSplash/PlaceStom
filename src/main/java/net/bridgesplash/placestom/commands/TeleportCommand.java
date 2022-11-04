@@ -1,4 +1,4 @@
-package dev.weiiswurst.placestom.commands;
+package net.bridgesplash.placestom.commands;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
@@ -10,7 +10,7 @@ import net.minestom.server.entity.Player;
 
 public class TeleportCommand extends Command {
 
-    private static final int MAX_VALUE = Integer.getInteger("placestom.worldborder-size") / 2 - 1;
+    private static final int MAX_VALUE = Integer.getInteger("worldborder-size") / 2 - 1;
 
     public TeleportCommand() {
         super("teleport", "tp");

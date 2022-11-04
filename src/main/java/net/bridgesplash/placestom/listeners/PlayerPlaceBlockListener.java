@@ -1,9 +1,9 @@
-package dev.weiiswurst.placestom.listeners;
+package net.bridgesplash.placestom.listeners;
 
 import com.j256.ormlite.dao.Dao;
-import dev.weiiswurst.placestom.world.ChunkData;
-import dev.weiiswurst.placestom.util.PlayerActionCoolDown;
-import dev.weiiswurst.placestom.world.PlayerPlacementLog;
+import net.bridgesplash.placestom.world.ChunkData;
+import net.bridgesplash.placestom.util.PlayerActionCoolDown;
+import net.bridgesplash.placestom.world.PlayerPlacementLog;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 
 import java.util.function.Consumer;

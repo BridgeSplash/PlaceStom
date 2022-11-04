@@ -1,7 +1,7 @@
-package dev.weiiswurst.placestom.world;
+package net.bridgesplash.placestom.world;
 
 import com.j256.ormlite.dao.Dao;
-import net.minestom.server.MinecraftServer;
+import net.bridgesplash.placestom.PlaceServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public record PlaceLoader(
         Dao<ChunkData, Integer> chunkDao) implements Generator {
 
-    public static final DimensionType PLACE_DIMENSION = DimensionType.builder(NamespaceID.from("placestom:world"))
+    public static final DimensionType PLACE_DIMENSION = DimensionType.builder(NamespaceID.from("bridgesplash:global"))
             .ultrawarm(false)
             .natural(false)
             .piglinSafe(false)
@@ -52,7 +52,7 @@ public record PlaceLoader(
     private void setChunkData(Block.Setter blockSetter, int chunkX, int chunkZ) {
         ChunkData chunkData = loadData(chunkX, chunkZ);
         if (chunkData == null) {
-            MinecraftServer.LOGGER.error("The chunk at x={} | z={} could not be loaded.", chunkX, chunkZ);
+            PlaceServer.logger.error("The chunk at x={} | z={} could not be loaded.", chunkX, chunkZ);
             return;
         }
         for (byte x = 0; x < Chunk.CHUNK_SIZE_X; x++) {

@@ -1,15 +1,12 @@
-package dev.weiiswurst.placestom.world;
+package net.bridgesplash.placestom.world;
 
+import net.bridgesplash.placestom.PlaceServer;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -17,10 +14,10 @@ import static net.minestom.server.item.Material.*;
 
 public final class PlaceBlocks {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlaceBlocks.class);
+    private static final ComponentLogger LOGGER = PlaceServer.logger;
 
-    public static final Block DEFAULT_BLOCK = Block.fromNamespaceId(System.getProperty("placestom.blocks.default", "barrier"));
-    public static final Block SPAWN_BLOCK = Block.fromNamespaceId(System.getProperty("placestom.blocks.spawn", "bedrock"));
+    public static final @NotNull Block DEFAULT_BLOCK = Objects.requireNonNull(Block.fromNamespaceId(System.getProperty("blocks.default", "barrier")));
+    public static final @NotNull Block SPAWN_BLOCK = Objects.requireNonNull(Block.fromNamespaceId(System.getProperty("blocks.spawn", "bedrock")));
 
     public static final List<Material> ALLOWED_BLOCKS;
 
@@ -28,7 +25,7 @@ public final class PlaceBlocks {
 
     static {
         Map<Material, Integer> materialToColorMap = new ConcurrentHashMap<>();
-        List<Material> configMaterials = Arrays.stream(System.getProperty("placestom.blocks.allowed-blocks", "").split(","))
+        List<Material> configMaterials = Arrays.stream(System.getProperty("blocks.allowed-blocks", "").split(","))
                 .map(combination -> combination.split("#"))
                 .map(array -> {
                     Material material = fromNamespaceId(array[0]);
@@ -40,7 +37,7 @@ public final class PlaceBlocks {
 
         if (configMaterials.isEmpty() || configMaterials.size() >= Byte.MAX_VALUE) {
             ALLOWED_BLOCKS = List.of(
-                    DEFAULT_BLOCK.registry().material(),
+                    Objects.requireNonNull(DEFAULT_BLOCK.registry().material()),
                     RED_CONCRETE,
                     ORANGE_CONCRETE,
                     YELLOW_CONCRETE,

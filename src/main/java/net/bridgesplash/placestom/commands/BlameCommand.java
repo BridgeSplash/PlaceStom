@@ -1,7 +1,7 @@
-package dev.weiiswurst.placestom.commands;
+package net.bridgesplash.placestom.commands;
 
 import com.j256.ormlite.dao.Dao;
-import dev.weiiswurst.placestom.world.PlayerPlacementLog;
+import net.bridgesplash.placestom.world.PlayerPlacementLog;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.coordinate.Pos;

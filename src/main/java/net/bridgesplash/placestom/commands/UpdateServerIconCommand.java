@@ -1,6 +1,7 @@
-package dev.weiiswurst.placestom.commands;
+package net.bridgesplash.placestom.commands;
 
-import dev.weiiswurst.placestom.map.RenderCanvas;
+import net.bridgesplash.placestom.PlaceServer;
+import net.bridgesplash.placestom.map.RenderCanvas;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Player;
 
@@ -14,7 +15,8 @@ public class UpdateServerIconCommand extends Command {
     public UpdateServerIconCommand() {
         super("generateservericon", "updateservericon");
         setCondition((sender, commandString) -> sender instanceof Player &&
-                sender.hasPermission("placestom.servericon"));
+                sender.hasPermission("placestom.servericon")
+                || (sender instanceof Player && PlaceServer.getPermissions((Player) sender, "placestom.servericon")));
         setDefaultExecutor((sender, context) -> {
             Player player = (Player) sender;
             player.sendMessage("Starting to render..");

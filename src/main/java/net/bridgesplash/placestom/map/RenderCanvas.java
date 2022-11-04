@@ -1,6 +1,6 @@
-package dev.weiiswurst.placestom.map;
+package net.bridgesplash.placestom.map;
 
-import dev.weiiswurst.placestom.world.PlaceBlocks;
+import net.bridgesplash.placestom.world.PlaceBlocks;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 

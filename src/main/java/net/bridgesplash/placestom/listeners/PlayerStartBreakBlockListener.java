@@ -1,16 +1,16 @@
-package dev.weiiswurst.placestom.listeners;
+package net.bridgesplash.placestom.listeners;
 
 import com.j256.ormlite.dao.Dao;
-import dev.weiiswurst.placestom.world.PlaceBlocks;
-import dev.weiiswurst.placestom.world.ChunkData;
-import dev.weiiswurst.placestom.util.PlayerActionCoolDown;
-import dev.weiiswurst.placestom.world.PlayerPlacementLog;
+import net.bridgesplash.placestom.util.PlayerActionCoolDown;
+import net.bridgesplash.placestom.world.ChunkData;
+import net.bridgesplash.placestom.world.PlaceBlocks;
+import net.bridgesplash.placestom.world.PlayerPlacementLog;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
 
 import java.util.function.Consumer;
 
-public record PlayerBreakBlockListener(PlayerActionCoolDown coolDown, Dao<ChunkData, Integer> chunkDao,
-                                       Dao<PlayerPlacementLog, Long> playerDao) implements Consumer<PlayerStartDiggingEvent>,
+public record PlayerStartBreakBlockListener(PlayerActionCoolDown coolDown, Dao<ChunkData, Integer> chunkDao,
+                                            Dao<PlayerPlacementLog, Long> playerDao) implements Consumer<PlayerStartDiggingEvent>,
         PlayerActionListener {
 
     @Override

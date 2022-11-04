@@ -1,68 +1,58 @@
-package dev.weiiswurst.placestom;
+package net.bridgesplash.placestom;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import dev.weiiswurst.placestom.commands.BlameCommand;
-import dev.weiiswurst.placestom.commands.ClearChunkCommand;
-import dev.weiiswurst.placestom.commands.CooldownCommand;
-import dev.weiiswurst.placestom.commands.SpawnCommand;
-import dev.weiiswurst.placestom.commands.StopCommand;
-import dev.weiiswurst.placestom.commands.TeleportCommand;
-import dev.weiiswurst.placestom.commands.UpdateServerIconCommand;
-import dev.weiiswurst.placestom.commands.VersionCommand;
-import dev.weiiswurst.placestom.listeners.MotdListener;
-import dev.weiiswurst.placestom.listeners.PlayerBreakBlockListener;
-import dev.weiiswurst.placestom.listeners.PlayerJoinListener;
-import dev.weiiswurst.placestom.listeners.PlayerPlaceBlockListener;
-import dev.weiiswurst.placestom.util.PropertyLoader;
-import dev.weiiswurst.placestom.util.UpdateChecker;
-import dev.weiiswurst.placestom.world.ChunkData;
-import dev.weiiswurst.placestom.world.PlaceLoader;
-import dev.weiiswurst.placestom.util.PlayerActionCoolDown;
-import dev.weiiswurst.placestom.world.PlayerPlacementLog;
+import net.bridgesplash.placestom.commands.*;
+import net.bridgesplash.placestom.listeners.*;
+import net.bridgesplash.placestom.util.PlayerActionCoolDown;
+import net.bridgesplash.placestom.util.PropertyLoader;
+import net.bridgesplash.placestom.world.ChunkData;
+import net.bridgesplash.placestom.world.PlaceLoader;
+import net.bridgesplash.placestom.world.PlayerPlacementLog;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.types.PermissionNode;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.item.ItemDropEvent;
-import net.minestom.server.event.player.PlayerBlockPlaceEvent;
-import net.minestom.server.event.player.PlayerLoginEvent;
-import net.minestom.server.event.player.PlayerStartDiggingEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerListPingEvent;
-import net.minestom.server.extras.MojangAuth;
-import net.minestom.server.instance.*;
+import net.minestom.server.extensions.Extension;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.timer.TaskSchedule;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 
-import static dev.weiiswurst.placestom.world.PlaceLoader.PLACE_DIMENSION;
+public final class PlaceServer extends Extension {
 
-public final class PlaceServer {
+    private static LuckPerms getLuckperms(){return LuckPermsProvider.get();}
+    public static ComponentLogger logger;
 
-    private PlaceServer() {
-
+    public static Boolean getPermissions(Player sender, String commandString) {
+        User user = getLuckperms().getUserManager().getUser(sender.getUuid());
+        if(user == null)return false;
+        PermissionNode node = PermissionNode.builder(commandString).build();
+        return user.getNodes().contains(node);
     }
 
-    public static void main(String[] args) throws SQLException, IOException, URISyntaxException {
+    public void main() throws SQLException, IOException, URISyntaxException {
+        PlaceServer.logger = getLogger();
         // Loading properties
         PropertyLoader.loadProperties();
 
-        // Check for updates
-        if (Boolean.getBoolean("placestom.check-for-updates")) {
-            UpdateChecker.checkForUpdates();
-        }
-
-        // Initialization
-        MinecraftServer minecraftServer = MinecraftServer.init();
-        MojangAuth.init();
-
         // Database connection
         ConnectionSource connectionSource = new JdbcConnectionSource(
-                System.getProperty("placestom.database-url", "jdbc:h2:./database"));
+                System.getProperty("database-url", "jdbc:h2:./database"));
         Dao<ChunkData, Integer> chunkDao = DaoManager.createDao(connectionSource, ChunkData.class);
         // Enable caching, because we don't support multiple servers on one database anyways
         chunkDao.setObjectCache(true);
@@ -74,13 +64,13 @@ public final class PlaceServer {
 
         // Create the instance (=world)
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        MinecraftServer.getDimensionTypeManager().addDimension(PLACE_DIMENSION);
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(PLACE_DIMENSION);
+        MinecraftServer.getDimensionTypeManager().addDimension(PlaceLoader.PLACE_DIMENSION);
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(PlaceLoader.PLACE_DIMENSION);
 
         // Setup of the instance
         instanceContainer.setGenerator(new PlaceLoader(chunkDao));
         instanceContainer.getWorldBorder().setCenter(0, 0);
-        instanceContainer.getWorldBorder().setDiameter(Integer.getInteger("placestom.worldborder-size", 500));
+        instanceContainer.getWorldBorder().setDiameter(Integer.getInteger("worldborder-size", 500));
         instanceContainer.setTime(6000);
         // No more sunset and sunrise
         instanceContainer.setTimeRate(0);
@@ -98,13 +88,10 @@ public final class PlaceServer {
         // Register event listeners
         registerListeners(instanceContainer, chunkDao, playerDao, cooldown);
 
-        // Start the server on port 25565
-        minecraftServer.start("0.0.0.0", Integer.getInteger("placestom.port", 25565));
     }
 
     private static void registerCommands(PlayerActionCoolDown cooldown, Dao<ChunkData, Integer> chunkDao, Dao<PlayerPlacementLog, Long> playerDao) {
         CommandManager commandManager = MinecraftServer.getCommandManager();
-        commandManager.register(new StopCommand());
         commandManager.register(new VersionCommand());
         commandManager.register(new CooldownCommand(cooldown));
         commandManager.register(new SpawnCommand());
@@ -118,10 +105,26 @@ public final class PlaceServer {
                                           Dao<PlayerPlacementLog, Long> playerDao, PlayerActionCoolDown cooldown) {
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addListener(PlayerLoginEvent.class, new PlayerJoinListener(instanceContainer));
+        globalEventHandler.addListener(PlayerDisconnectEvent.class, new PlayerLeaveListener());
         globalEventHandler.addListener(PlayerBlockPlaceEvent.class, new PlayerPlaceBlockListener(cooldown, chunkDao, playerDao));
-        globalEventHandler.addListener(PlayerStartDiggingEvent.class, new PlayerBreakBlockListener(cooldown, chunkDao, playerDao));
+        globalEventHandler.addListener(PlayerStartDiggingEvent.class, new PlayerStartBreakBlockListener(cooldown, chunkDao, playerDao));
+        globalEventHandler.addListener(PlayerBlockBreakEvent.class, new PlayerBreakBlockListener(cooldown, chunkDao, playerDao));
         globalEventHandler.addListener(ServerListPingEvent.class, new MotdListener());
         globalEventHandler.addListener(ItemDropEvent.class, event -> event.setCancelled(true));
     }
 
+    @Override
+    public void initialize() {
+        try {
+            main();
+        } catch (SQLException | IOException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        getLogger().info("PlaceStom has been enabled!");
+    }
+
+    @Override
+    public void terminate() {
+        getLogger().info("Placestom Shutting down...");
+    }
 }
