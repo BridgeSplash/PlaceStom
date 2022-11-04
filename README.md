@@ -22,11 +22,11 @@ PlaceStom is a [Minestom](https://github.com/Minestom/Minestom) implementation o
   * Clear a chunk (/clearchunk, `placestom.clearchunk`)
   * Generate a server icon from the canvas around you (/generateservericon, `placestom.servericon`)
   * Implementation for [LuckPerms](https://github.com/Project-Cepi/LuckPerms)
+* Shows Joins / Leaves as a chat message
 
 ## Upcoming features
-* Storing the player position (or maybe in an extension?)
-* Storing player statistics (blocks placed in total, ...)
-* A better console?
+* Storing the player position
+* Storing player leaderboard system (for blocks placed, or reputation points?)
 
 ## Contributing
 We always want to see contributors! To contribute:
