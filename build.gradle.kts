@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("net.kyori.blossom") version "1.2.0"
+    id("org.sonarqube") version "3.3"
 }
 
 group = "net.bridgesplash"
@@ -46,4 +47,11 @@ tasks{
 }
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+sonarqube {
+    properties {
+        property("sonar.projectKey", "BridgeSplash_PlaceStom")
+        property( "sonar.organization", "bridgesplash")
+        property( "sonar.host.url", "https://sonarcloud.io")
+    }
 }
