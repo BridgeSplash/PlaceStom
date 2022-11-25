@@ -1,4 +1,4 @@
-package dev.weiiswurst.placestom.util;
+package net.bridgesplash.placestom.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

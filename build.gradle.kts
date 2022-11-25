@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "net.bridgesplash"
-version = "v1.2.0"
+version = "v1.2.1"
 
 repositories {
     mavenCentral()

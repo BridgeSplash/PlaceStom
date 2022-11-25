@@ -9,6 +9,7 @@ import net.bridgesplash.placestom.commands.*;
 import net.bridgesplash.placestom.listeners.*;
 import net.bridgesplash.placestom.util.PlayerActionCoolDown;
 import net.bridgesplash.placestom.util.PropertyLoader;
+import net.bridgesplash.placestom.util.UpdateChecker;
 import net.bridgesplash.placestom.world.ChunkData;
 import net.bridgesplash.placestom.world.PlaceLoader;
 import net.bridgesplash.placestom.world.PlayerPlacementLog;
@@ -27,6 +28,7 @@ import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.timer.TaskSchedule;
 
 import java.io.IOException;
@@ -66,7 +68,7 @@ public final class PlaceServer extends Extension {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         MinecraftServer.getDimensionTypeManager().addDimension(PlaceLoader.PLACE_DIMENSION);
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(PlaceLoader.PLACE_DIMENSION);
-
+        instanceContainer.setTag(Tag.Boolean("no_unload_instance"), true);
         // Setup of the instance
         instanceContainer.setGenerator(new PlaceLoader(chunkDao));
         instanceContainer.getWorldBorder().setCenter(0, 0);
@@ -117,6 +119,7 @@ public final class PlaceServer extends Extension {
     public void initialize() {
         try {
             main();
+            UpdateChecker.checkForUpdates();
         } catch (SQLException | IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
