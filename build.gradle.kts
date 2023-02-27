@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "net.bridgesplash"
-version = "v1.2.1"
+version = "v1.3.2"
 
 repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ dependencies {
     compileOnly("org.jetbrains:annotations:23.0.0")
 
     compileOnly("net.luckperms:api:5.4")
-    compileOnly("com.github.Minestom:Minestom:42195c536b")
+    compileOnly("com.github.Minestom.Minestom:Minestom:a9e319f961")
 
     implementation("com.j256.ormlite:ormlite-jdbc:6.1")
     implementation("com.h2database:h2:2.1.214")

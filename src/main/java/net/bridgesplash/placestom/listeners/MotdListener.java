@@ -38,7 +38,7 @@ public class MotdListener implements Consumer<ServerListPingEvent> {
     @Override
     public void accept(ServerListPingEvent event) {
         ResponseData response = event.getResponseData();
-        response.setDescription(Component.text("BridgeSplash Limbo "));
+        response.setDescription(Component.text("Tesseract Limbo "));
         response.setFavicon(serverIcon);
         event.setResponseData(response);
     }

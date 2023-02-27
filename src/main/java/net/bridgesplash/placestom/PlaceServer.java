@@ -97,7 +97,6 @@ public final class PlaceServer extends Extension {
         commandManager.register(new VersionCommand());
         commandManager.register(new CooldownCommand(cooldown));
         commandManager.register(new SpawnCommand());
-        commandManager.register(new TeleportCommand());
         commandManager.register(new ClearChunkCommand(chunkDao));
         commandManager.register(new BlameCommand(playerDao));
         commandManager.register(new UpdateServerIconCommand());

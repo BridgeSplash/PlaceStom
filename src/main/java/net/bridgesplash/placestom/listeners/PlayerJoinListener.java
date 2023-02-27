@@ -4,6 +4,7 @@ import net.bridgesplash.placestom.PlaceServer;
 import net.bridgesplash.placestom.world.PlaceBlocks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
@@ -24,6 +25,7 @@ public record PlayerJoinListener(InstanceContainer instanceContainer) implements
         final Player player = event.getPlayer();
         logger.info(player.getUsername() + " joined the server. IP: " + player.getPlayerConnection().getRemoteAddress());
         logger.info("Player "+ player.getUsername() +" UUID (" + player.getUuid() + ") .");
+        player.sendMessage(Component.text("Welcome to Limbo (r/Place in minecraft), I don't exactly know why u are here but it is most likely due to a server shutting down... please wait a minute before rejoining or running /server [server_name]", NamedTextColor.GRAY));
 
         player.setAllowFlying(true);
         player.setLevel(69);
